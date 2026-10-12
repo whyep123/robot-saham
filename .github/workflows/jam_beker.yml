@@ -1,0 +1,28 @@
+name: Robot Saham Sore
+
+on:
+  schedule:
+    # Waktu ini berarti jam 16.30 WIB (Senin sampai Jumat)
+    - cron: '30 9 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  bangun-dan-kerja:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil Buku Resep
+        uses: actions/checkout@v3
+
+      - name: Siapkan Dapur
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Siapkan Alat Masak
+        run: pip install requests pandas yfinance
+
+      - name: Mulai Memasak (Jalankan Robot)
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python bot_saham.py
